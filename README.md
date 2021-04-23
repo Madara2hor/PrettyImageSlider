@@ -13,7 +13,7 @@ You can dinamicly change font, size and weight of image title and description fr
 Add following code in you Podfile
 
 ```
-source 'https://bitbucket.org/toolbarstudio/siframework.git'
+source 'https://github.com/Madara2hor/PrettyImageSlider'
 source 'https://github.com/CocoaPods/Specs.git'
 
 platform :ios, 'iOS_version'
