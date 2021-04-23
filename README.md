@@ -29,7 +29,7 @@ then run  `pod install`  and `pod update` from you project folder.
 
 ## Author
 
-Kirill Provkin, Kirill.Provkin@softomate.com
+Kirill Provkin, kkprokk07@gmail.com
 
 ## License
 
