@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'PrettyImageSlider'
-  s.version          = '0.1.0'
+  s.version          = '0.2.2'
   s.summary          = 'Image slider with thin page control'
 
 # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Kirill Provkin' => 'Kirill.Provkin@softomate.com' }
   s.source           = { :git => 'https://bitbucket.org/toolbarstudio/PrettyImageSlider.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '13.0'
+  s.ios.deployment_target = '12.1'
   s.swift_version = '5.0'
 
   s.source_files = 'PrettyImageSlider/Source/**/*'
