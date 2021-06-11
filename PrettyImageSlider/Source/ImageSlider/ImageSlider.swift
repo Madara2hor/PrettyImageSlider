@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class ImageSlider: RoundShadowView {
+open class ImageSlider: UIView {
     
     // MARK: - Public properties
     
@@ -61,19 +61,23 @@ open class ImageSlider: RoundShadowView {
         }
     }
     
-    @IBInspectable
     public var hidePageControlOnSinglePage: Bool = true {
         didSet {
             pageControl.hideOnSinglePage = hidePageControlOnSinglePage
         }
     }
     
+    public var currentPage: Int {
+        return scrollView.currentPage
+    }
+    
+    public var isAutoScrollable: Bool = true
+    
     // MARK: - Private properties
     
-    fileprivate var scrollView: UIScrollView = {
+    private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
         scrollView.isPagingEnabled = true
         scrollView.bounces = false
         scrollView.showsHorizontalScrollIndicator = false
@@ -81,26 +85,43 @@ open class ImageSlider: RoundShadowView {
         return scrollView
     }()
     
-    fileprivate var stackView: UIStackView = {
+    private var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
         return stackView
     }()
 
-    fileprivate var pageControl = ChipPageControl()
+    private let containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 16
+        view.layer.masksToBounds = true
+        return view
+    }()
     
-    fileprivate var sliderItems: [ImageSliderObject] = []
+    private var pageControl = ChipPageControl()
+    
+    private var sliderItems: [ImageSliderObject] = []
+    
+    private var autoScrollTimer : Timer?
+    
+    private var autoScrollDirection: PageMove = .forward
+    
+    private var beginAutoScroll: DispatchWorkItem?
+    
+    private var isUserInteracted: Bool = false
+    
+    private var isNeedToStartScrolling: Bool = false
     
     // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        scrollView.delegate = self
+        setup()
         setupViews()
         setupLayout()
     }
@@ -108,7 +129,7 @@ open class ImageSlider: RoundShadowView {
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
         
-        scrollView.delegate = self
+        setup()
         setupViews()
         setupLayout()
     }
@@ -116,9 +137,9 @@ open class ImageSlider: RoundShadowView {
     // MARK: - Public methods
     
     public func bind(with sliderObjects: [ImageSliderObject]) {
-        sliderItems = sliderObjects
-        
         clear()
+        
+        sliderItems = sliderObjects
         pageControl.numberOfPages = sliderObjects.count
         
         sliderObjects.forEach { object in
@@ -131,86 +152,174 @@ open class ImageSlider: RoundShadowView {
                 )
             )
             imageSliderView.bind(with: object)
+            setStyle(for: imageSliderView)
             stackView.addArrangedSubview(imageSliderView)
+            setupImageSliderViewConstraints(imageSliderView)
+        }
+        
+        if isNeedToStartScrolling {
+            startAutoScrolling()
         }
     }
     
-    public func append(_ sliderObjects: [ImageSliderObject]) {
-        sliderItems += sliderObjects
-        pageControl.numberOfPages = sliderItems.count
-        
-        sliderObjects.forEach { object in
-            let imageSliderView = ImageSliderView(
-                frame: CGRect(
-                    x: 0,
-                    y: 0,
-                    width: frame.width,
-                    height: frame.height
-                )
-            )
-            imageSliderView.bind(with: object)
-            stackView.addArrangedSubview(imageSliderView)
+    public func startAutoScrolling() {
+        guard isAutoScrollable else { return }
+        guard pageControl.numberOfPages > 1 else {
+            isNeedToStartScrolling = true
+            return
         }
+        autoScrollTimer?.invalidate()
+        autoScrollTimer = Timer.scheduledTimer(
+            timeInterval: 2,
+            target: self,
+            selector: #selector(autoScroll),
+            userInfo: nil,
+            repeats: true
+        )
     }
     
-    public func remove(at index: Int) {
-        guard !sliderItems.isEmpty, index >= 0, index < sliderItems.count else {
-            preconditionFailure("Index out of range.")
-        }
-        sliderItems.remove(at: index)
-        
-        let viewOnRemove = stackView.arrangedSubviews[index]
-        stackView.removeArrangedSubview(viewOnRemove)
-        pageControl.numberOfPages = sliderItems.count
-        if pageControl.page == sliderItems.count, pageControl.page != 0 {
-            pageControl.page -= 1
-        }
+    public func stopAutoScrolling() {
+        isNeedToStartScrolling = false
+        autoScrollTimer?.invalidate()
     }
     
     // MARK: - Private methods
     
-    fileprivate func setupViews() {
+    private func setup() {
+        layer.backgroundColor = UIColor.clear.cgColor
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 1.0)
+        layer.shadowOpacity = 0.3
+        layer.shadowRadius = 4.0
+        
+        scrollView.delegate = self
+        addSwipeGestures()
+    }
+    
+    private func setupViews() {
+        addSubview(containerView)
         containerView.addSubview(scrollView)
         scrollView.addSubview(stackView)
         containerView.addSubview(pageControl)
     }
     
-    fileprivate func setupLayout() {
-        scrollView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        scrollView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    private func setupLayout() {
+        let constraints: [NSLayoutConstraint] = [
+            /// Container view constraints
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            /// Scroll view constraints
+            scrollView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            /// Stack view constraints
+            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
+            /// Page control constraints
+            pageControl.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.7),
+            pageControl.heightAnchor.constraint(equalToConstant: 1.5),
+            pageControl.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            pageControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8)
+        ]
         
-        stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        stackView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-        stackView.heightAnchor.constraint(equalTo: scrollView.heightAnchor).isActive = true
+        constraints.forEach {
+            $0.isActive = true
+        }
         
-        pageControl.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.5).isActive = true
-        pageControl.heightAnchor.constraint(equalToConstant: 1.5).isActive = true
-        pageControl.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        pageControl.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8).isActive = true
-        containerView.layoutIfNeeded()
     }
     
-    fileprivate func changeImageSliderViewStyle() {
+    /// Seems like shit, but it's work
+    private func setupImageSliderViewConstraints(_ view: ImageSliderView) {
+        let heightConstraint = NSLayoutConstraint(
+            item: containerView,
+            attribute: .height,
+            relatedBy: .equal,
+            toItem: view,
+            attribute: .height,
+            multiplier: 1,
+            constant: 0
+        )
+        let widthConstraint = NSLayoutConstraint(
+            item: containerView,
+            attribute: .width,
+            relatedBy: .equal,
+            toItem: view,
+            attribute: .width,
+            multiplier: 1,
+            constant: 0
+        )
+        containerView.addConstraint(heightConstraint)
+        containerView.addConstraint(widthConstraint)
+    }
+    
+    private func addSwipeGestures() {
+        let swipeLeft = UISwipeGestureRecognizer(
+            target: self,
+            action: #selector(handleGesture)
+        )
+        swipeLeft.direction = .left
+        let swipeRight = UISwipeGestureRecognizer(
+            target: self,
+            action: #selector(handleGesture)
+        )
+        swipeRight.direction = .right
+        
+        addGestureRecognizer(swipeLeft)
+        addGestureRecognizer(swipeRight)
+        
+        swipeRight.delegate = self
+        swipeLeft.delegate = self
+    }
+    
+    @objc private func handleGesture(gesture: UISwipeGestureRecognizer) {
+        if gesture.direction == .left {
+            autoScrollDirection = .forward
+        } else if gesture.direction == .right {
+            autoScrollDirection = .backward
+        }
+        
+        beginAutoScroll?.cancel()
+        
+        isUserInteracted = true
+        stopAutoScrolling()
+        
+        beginAutoScroll = DispatchWorkItem { [self] in
+            guard isAutoScrollable else { return }
+            isUserInteracted = false
+            startAutoScrolling()
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4, execute: beginAutoScroll!)
+    }
+    
+    private func changeImageSliderViewStyle() {
         stackView.arrangedSubviews.forEach {
             if let imageSliderView = $0 as? ImageSliderView {
-                imageSliderView.titleTextColor = titleTextColor
-                imageSliderView.titleFontWeight = titleFontWeight
-                imageSliderView.titleFontSize = titleFontSize
-                imageSliderView.descriptionTextColor = descriptionTextColor
-                imageSliderView.descriptionFontWeight = descriptionFontWeight
-                imageSliderView.descriptionFontSize = descriptionFontSize
+                setStyle(for: imageSliderView)
             }
         }
     }
     
-    fileprivate func clear() {
+    private func setStyle(for imageSliderView: ImageSliderView) {
+        imageSliderView.titleTextColor = titleTextColor
+        imageSliderView.titleFontWeight = titleFontWeight
+        imageSliderView.titleFontSize = titleFontSize
+        imageSliderView.descriptionTextColor = descriptionTextColor
+        imageSliderView.descriptionFontWeight = descriptionFontWeight
+        imageSliderView.descriptionFontSize = descriptionFontSize
+    }
+    
+    private func clear() {
         stackView.arrangedSubviews.forEach {
             $0.removeFromSuperview()
         }
+        scrollView.setContentOffset(.zero, animated: false)
     }
     
 }
@@ -218,9 +327,47 @@ open class ImageSlider: RoundShadowView {
 extension ImageSlider: UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard isUserInteracted else { return }
+        
         if pageControl.page != scrollView.currentPage {
-            pageControl.page = scrollView.currentPage
+            pageControl.setPage(scrollView.currentPage)
         }
     }
     
+    @objc private func autoScroll() {
+        if pageControl.page == 0 {
+            autoScrollDirection = .forward
+        } else if pageControl.page == pageControl.numberOfPages - 1 {
+            autoScrollDirection = .backward
+        }
+        let newPage = autoScrollDirection == .forward ?
+            pageControl.page + 1:
+            pageControl.page - 1
+        
+        scrollView.setContentOffset(
+            CGPoint(
+                x: Int(scrollView.frame.width) * newPage,
+                y: 0
+            ),
+            animated: true
+        )
+        pageControl.setPage(newPage)
+    }
+    
+}
+
+extension ImageSlider: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+            return true
+    }
+
+    public func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldReceive touch: UITouch
+    ) -> Bool {
+            return true
+    }
 }
