@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIView {
+internal extension UIView {
     
     func addInnerShadow(
         to edges: [UIRectEdge],
@@ -19,7 +19,7 @@ extension UIView {
         let toColor = UIColor.clear.cgColor
         let viewFrame = frame
         let mainRadius = radius == nil ?
-            frame.height / 2 :
+            frame.height / 1.7 :
             radius!
         
         for edge in edges {
