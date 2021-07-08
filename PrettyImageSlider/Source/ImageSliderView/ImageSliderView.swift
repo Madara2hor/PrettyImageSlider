@@ -18,23 +18,12 @@ open class ImageSliderView: UIImageView {
         }
     }
     
-    @IBInspectable
-    public var titleFontSize: CGFloat = 14 {
+    public var titleFont: UIFont = UIFont.systemFont(
+        ofSize: 14,
+        weight: .regular
+    ) {
         didSet {
-            titleLabel.font = UIFont.systemFont(
-                ofSize: titleFontSize,
-                weight: titleFontWeight
-            )
-        }
-    }
-    
-    @IBInspectable
-    public var titleFontWeight: UIFont.Weight = .regular {
-        didSet {
-            titleLabel.font = UIFont.systemFont(
-                ofSize: titleFontSize,
-                weight: titleFontWeight
-            )
+            titleLabel.font = titleFont
         }
     }
     
@@ -45,23 +34,12 @@ open class ImageSliderView: UIImageView {
         }
     }
     
-    @IBInspectable
-    public var descriptionFontSize: CGFloat = 24 {
+    public var descriptionFont: UIFont = UIFont.systemFont(
+        ofSize: 24,
+        weight: .bold
+    ) {
         didSet {
-            descriptionLabel.font = UIFont.systemFont(
-                ofSize: descriptionFontSize,
-                weight: descriptionFontWeight
-            )
-        }
-    }
-    
-    @IBInspectable
-    public var descriptionFontWeight: UIFont.Weight = .bold {
-        didSet {
-            descriptionLabel.font = UIFont.systemFont(
-                ofSize: descriptionFontSize,
-                weight: descriptionFontWeight
-            )
+            descriptionLabel.font = descriptionFont
         }
     }
     
@@ -118,17 +96,11 @@ open class ImageSliderView: UIImageView {
         
         titleLabel.text = object.title
         titleLabel.textColor = titleTextColor
-        titleLabel.font = UIFont.systemFont(
-            ofSize: titleFontSize,
-            weight: titleFontWeight
-        )
+        titleLabel.font = titleFont
         
         descriptionLabel.text = object.description
         descriptionLabel.textColor = descriptionTextColor
-        descriptionLabel.font = UIFont.systemFont(
-            ofSize: descriptionFontSize,
-            weight: descriptionFontWeight
-        )
+        descriptionLabel.font = descriptionFont
     }
     
     // MARK: - Private methods

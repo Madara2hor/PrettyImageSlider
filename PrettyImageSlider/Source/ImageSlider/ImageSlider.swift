@@ -27,14 +27,10 @@ open class ImageSlider: UIView {
     }
     
     @IBInspectable
-    public var titleFontSize: CGFloat = 14 {
-        didSet {
-            changeImageSliderViewStyle()
-        }
-    }
-    
-    @IBInspectable
-    public var titleFontWeight: UIFont.Weight = .regular {
+    public var titleFont: UIFont = UIFont.systemFont(
+        ofSize: 14,
+        weight: .regular
+    ) {
         didSet {
             changeImageSliderViewStyle()
         }
@@ -47,15 +43,10 @@ open class ImageSlider: UIView {
         }
     }
     
-    @IBInspectable
-    public var descriptionFontSize: CGFloat = 24 {
-        didSet {
-            changeImageSliderViewStyle()
-        }
-    }
-    
-    @IBInspectable
-    public var descriptionFontWeight: UIFont.Weight = .bold {
+    public var descriptionFont: UIFont = UIFont.systemFont(
+        ofSize: 24,
+        weight: .bold
+    ) {
         didSet {
             changeImageSliderViewStyle()
         }
@@ -72,6 +63,8 @@ open class ImageSlider: UIView {
     }
     
     public var isAutoScrollable: Bool = true
+    
+    public var scrollTimeInterval: TimeInterval = 3
     
     // MARK: - Private properties
     
@@ -170,7 +163,7 @@ open class ImageSlider: UIView {
         }
         autoScrollTimer?.invalidate()
         autoScrollTimer = Timer.scheduledTimer(
-            timeInterval: 2,
+            timeInterval: scrollTimeInterval,
             target: self,
             selector: #selector(autoScroll),
             userInfo: nil,
@@ -308,11 +301,9 @@ open class ImageSlider: UIView {
     
     private func setStyle(for imageSliderView: ImageSliderView) {
         imageSliderView.titleTextColor = titleTextColor
-        imageSliderView.titleFontWeight = titleFontWeight
-        imageSliderView.titleFontSize = titleFontSize
+        imageSliderView.titleFont = titleFont
         imageSliderView.descriptionTextColor = descriptionTextColor
-        imageSliderView.descriptionFontWeight = descriptionFontWeight
-        imageSliderView.descriptionFontSize = descriptionFontSize
+        imageSliderView.descriptionFont = descriptionFont
     }
     
     private func clear() {

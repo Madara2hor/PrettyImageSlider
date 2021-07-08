@@ -1,36 +1,106 @@
 # PrettyImageSlider
 
-Image slider with title, decription and thin page control.
-You can dinamicly change font, size and weight of image title and description from code and storyboard.
+____
+### 📄Описание 
 
-## Example
+PrettyImageSlider - красивый слайдер с картинками.
 
-![Example 1](./Assets/asset_0.jpg?raw=true)
-![Example 2](./Assets/asset_1.jpg?raw=true)
+![Пример работы библиотеки](/Assets/asset_0.gif?rawValue=true "Пример работы библиотеки")
 
-## Installation
+____
+### 🔨Подключение
 
-Add following code in you Podfile
+1. Подключите SIFramework ([см. инструкцию](https://softomate.atlassian.net/wiki/spaces/MD/pages/1304330304/Work+with+sif)).
 
+2. В pod файл добавить PrettyImageSlider.
 ```
-source 'https://bitbucket.org/toolbarstudio/siframework.git'
-source 'https://github.com/CocoaPods/Specs.git'
-
-platform :ios, 'iOS_version'
-
 target 'app_name' do
   use_frameworks!
-  pod 'PrettyImageSlider'
-
-end
+  pod 'PrettyImageSlider' -> 'last.version'
 ```
 
-then run  `pod install`  and `pod update` from you project folder.
+3. Далее устанавливаем библиотеку из корневой папки проекта.
+```
+pod install
+```
 
-## Author
+4. Подключаем библиотеку в нужном ViewController’е.
+```swift
+import PrettyImageSlider
+```
+
+____
+### 🤌🏼Свойства
+
+| Property | getter, setter | Interface Builder |
+|:----|:----|:----------|
+| cornerRadius | ✅, ✅ | ✅ |
+| titleTextColor | ✅, ✅ | ✅ |
+| titleFont | ✅, ✅ | ❌ |
+| descriptionTextColor | ✅, ✅ | ✅ |
+| descriptionFont| ✅, ✅ | ❌ | 
+| hidePageControlOnSinglePage | ✅, ✅ | ❌ |
+| currentPage | ✅, ❌ | ❌ |
+| isAutoScrollable | ✅, ✅ | ❌ |
+| scrollTimeInterval | ✅, ✅ | ❌ |
+
+> При использовании `isAutoScrollable = true` пользователь так же может скроллить слайдер. Авто скролл возобновится автоматически через 5 секунд после последнего взаимодействия (свайп влево или вправо) со слайдером.
+
+____
+### 🤙🏼Методы
+
+#### Bind
+```Swift
+public func bind(with sliderObjects: [ImageSliderObject])
+```
+
+Пример использования:
+```Swift
+sliderView.bind(
+    with: ImageSliderObject(
+        image: URL(string: "https://website.com/image.jpg"),
+        title: "Perfect title for image",
+        description: "Amaizing description for image"
+    )
+)
+```
+
+#### Auto scrolling
+
+* Start:
+
+```Swift
+public func startAutoScrolling() 
+```
+
+Пример использования:
+```Swift
+override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    sliderView.startAutoScrolling()
+}
+```
+
+* Stop:
+
+```Swift
+public func stopAutoScrolling() 
+```
+
+Пример использования:
+```Swift
+override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    sliderView.stopAutoScrolling()
+}
+```
+
+____
+### Автор
 
 Kirill Provkin, Kirill.Provkin@softomate.com
 
+____
 ## License
 
 PrettyImageSlider is available under the MIT license. See the LICENSE file for more info.
