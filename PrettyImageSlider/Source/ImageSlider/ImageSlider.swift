@@ -318,6 +318,9 @@ open class ImageSlider: UIView {
 extension ImageSlider: UIScrollViewDelegate {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Vertical scrolling disable
+        // when imageslider pinned to superview
+        scrollView.contentOffset.y = 0
         guard isUserInteracted else { return }
         
         if pageControl.page != scrollView.currentPage {
