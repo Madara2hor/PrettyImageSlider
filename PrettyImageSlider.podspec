@@ -22,11 +22,11 @@ Pod::Spec.new do |s|
   You can dinamicly change font, size and weight of image title and description from code and storyboard.
                        DESC
 
-  s.homepage         = 'https://github.com/Madara2hor/ProgressTimer'
+  s.homepage         = 'https://github.com/Madara2hor/PrettyImageSlider'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Madara2hor' => 'Kkprokk07@gmail.com' }
-  s.source           = { :git => 'https://github.com/Madara2hor/ProgressTimer.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/Madara2hor/PrettyImageSlider.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '12.1'
   s.swift_version = '5.0'
