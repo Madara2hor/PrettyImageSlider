@@ -92,7 +92,7 @@ open class ImageSliderView: UIImageView {
     
     public func bind(with object: ImageSliderObject) {
         self.object = object
-        load(url: object.image)
+        self.image = object.image
         
         titleLabel.text = object.title
         titleLabel.textColor = titleTextColor

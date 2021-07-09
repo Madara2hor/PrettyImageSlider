@@ -9,14 +9,14 @@ import UIKit
 
 public struct ImageSliderObject {
     // Image for slider object
-    public let image: URL
+    public let image: UIImage
     // Title for slider object
     public let title: String?
     // Description for slider object
     public let description: String?
     
     public init(
-        image: URL,
+        image: UIImage,
         title: String? = nil,
         description: String? = nil
     ) {
