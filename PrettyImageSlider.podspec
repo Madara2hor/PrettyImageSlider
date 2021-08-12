@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'PrettyImageSlider'
-  s.version          = '0.2.5'
+  s.version          = '0.2.6'
   s.summary          = 'Image slider with thin page control'
 
 # This description is used to generate tags and improve search results.
@@ -22,11 +22,11 @@ Pod::Spec.new do |s|
   You can dinamicly change font, size and weight of image title and description from code and storyboard.
                        DESC
 
-  s.homepage         = 'https://github.com/Madara2hor/PrettyImageSlider'
+  s.homepage         = 'https://bitbucket.org/toolbarstudio/PrettyImageSlider'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Madara2hor' => 'Kkprokk07@gmail.com' }
-  s.source           = { :git => 'https://github.com/Madara2hor/PrettyImageSlider.git', :tag => s.version.to_s }
+  s.author           = { 'Kirill Provkin' => 'Kirill.Provkin@softomate.com' }
+  s.source           = { :git => 'https://bitbucket.org/toolbarstudio/PrettyImageSlider.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '12.1'
   s.swift_version = '5.0'

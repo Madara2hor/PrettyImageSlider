@@ -14,7 +14,6 @@
 		0236FF44262A034400EEE3B0 /* ChipPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0236FF43262A034400EEE3B0 /* ChipPageControl.swift */; };
 		0236FF50262A058600EEE3B0 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0236FF4F262A058600EEE3B0 /* UIView.swift */; };
 		0236FF7B2630008100EEE3B0 /* ImageSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0236FF7A2630008100EEE3B0 /* ImageSliderView.swift */; };
-		02E2A811263BEB20007CA769 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E2A810263BEB20007CA769 /* UIImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +26,6 @@
 		0236FF43262A034400EEE3B0 /* ChipPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipPageControl.swift; sourceTree = "<group>"; };
 		0236FF4F262A058600EEE3B0 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		0236FF7A2630008100EEE3B0 /* ImageSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSliderView.swift; sourceTree = "<group>"; };
-		02E2A810263BEB20007CA769 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +81,6 @@
 				0236FF1F26298F5C00EEE3B0 /* UIColor.swift */,
 				0236FF3F262A008B00EEE3B0 /* UIScrollView.swift */,
 				0236FF4F262A058600EEE3B0 /* UIView.swift */,
-				02E2A810263BEB20007CA769 /* UIImageView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -192,7 +189,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02E2A811263BEB20007CA769 /* UIImageView.swift in Sources */,
 				0236FF312629BC5700EEE3B0 /* ImageSliderObject.swift in Sources */,
 				0236FF2026298F5C00EEE3B0 /* UIColor.swift in Sources */,
 				0236FF40262A008B00EEE3B0 /* UIScrollView.swift in Sources */,

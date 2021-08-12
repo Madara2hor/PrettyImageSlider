@@ -18,14 +18,12 @@ open class ImageSlider: UIView {
             containerView.layer.cornerRadius = cornerRadius
         }
     }
-    
     @IBInspectable
     public var titleTextColor: UIColor = .white {
         didSet {
             changeImageSliderViewStyle()
         }
     }
-    
     @IBInspectable
     public var titleFont: UIFont = UIFont.systemFont(
         ofSize: 14,
@@ -35,14 +33,12 @@ open class ImageSlider: UIView {
             changeImageSliderViewStyle()
         }
     }
-    
     @IBInspectable
     public var descriptionTextColor: UIColor = .white {
         didSet {
             changeImageSliderViewStyle()
         }
     }
-    
     public var descriptionFont: UIFont = UIFont.systemFont(
         ofSize: 24,
         weight: .bold
@@ -51,34 +47,35 @@ open class ImageSlider: UIView {
             changeImageSliderViewStyle()
         }
     }
-    
     public var hidePageControlOnSinglePage: Bool = true {
         didSet {
             pageControl.hideOnSinglePage = hidePageControlOnSinglePage
         }
     }
-    
     public var currentPage: Int {
-        return scrollView.currentPage
+        return pageControl.currentPage
     }
-    
-    public var isAutoScrollable: Bool = true
-    
+    public var isAutoScrollable: Bool = false {
+        didSet {
+            isUserInteracted = !isAutoScrollable
+            swipeLeft.isEnabled = isAutoScrollable
+            swipeRight.isEnabled = isAutoScrollable
+        }
+    }
     public var scrollTimeInterval: TimeInterval = 3
     
     // MARK: - Private properties
     
-    private var scrollView: UIScrollView = {
+    private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.isPagingEnabled = true
-        scrollView.bounces = false
+        scrollView.bounces = true
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         return scrollView
     }()
-    
-    private var stackView: UIStackView = {
+    private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
@@ -86,7 +83,6 @@ open class ImageSlider: UIView {
         stackView.distribution = .fillEqually
         return stackView
     }()
-
     private let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -95,25 +91,21 @@ open class ImageSlider: UIView {
         return view
     }()
     
+    private var sliderItems: [ImageSliderObject] = []
     private var pageControl = ChipPageControl()
     
-    private var sliderItems: [ImageSliderObject] = []
-    
-    private var autoScrollTimer : Timer?
-    
-    private var autoScrollDirection: PageMove = .forward
-    
+    private var autoScrollTimer: Timer?
     private var beginAutoScroll: DispatchWorkItem?
+    private var swipeLeft: UISwipeGestureRecognizer!
+    private var swipeRight: UISwipeGestureRecognizer!
     
-    private var isUserInteracted: Bool = false
-    
+    private var isUserInteracted: Bool = true
     private var isNeedToStartScrolling: Bool = false
     
     // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setup()
         setupViews()
         setupLayout()
@@ -121,7 +113,6 @@ open class ImageSlider: UIView {
     
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
-        
         setup()
         setupViews()
         setupLayout()
@@ -131,11 +122,21 @@ open class ImageSlider: UIView {
     
     public func bind(with sliderObjects: [ImageSliderObject]) {
         clear()
+        guard !sliderObjects.isEmpty else {
+            print("🔥 Slider objects is empty")
+            return
+        }
         
-        sliderItems = sliderObjects
-        pageControl.numberOfPages = sliderObjects.count
+        if let firstItem = sliderObjects.first,
+            let lastItem = sliderObjects.last {
+            sliderItems = [lastItem] + sliderObjects + [firstItem]
+            pageControl.numberOfPages = sliderItems.count - 2
+        } else {
+            sliderItems = sliderObjects
+            pageControl.numberOfPages = sliderObjects.count
+        }
         
-        sliderObjects.forEach { object in
+        sliderItems.forEach { object in
             let imageSliderView = ImageSliderView(
                 frame: CGRect(
                     x: 0,
@@ -149,7 +150,16 @@ open class ImageSlider: UIView {
             stackView.addArrangedSubview(imageSliderView)
             setupImageSliderViewConstraints(imageSliderView)
         }
-        
+        layoutIfNeeded()
+        if sliderItems.count > 1  {
+            scrollView.setContentOffset(
+                CGPoint(
+                    x: Int(scrollView.frame.width) * 1,
+                    y: 0
+                ),
+                animated: false
+            )
+        }
         if isNeedToStartScrolling {
             startAutoScrolling()
         }
@@ -157,10 +167,9 @@ open class ImageSlider: UIView {
     
     public func startAutoScrolling() {
         guard isAutoScrollable else { return }
-        guard pageControl.numberOfPages > 1 else {
-            isNeedToStartScrolling = true
-            return
-        }
+        isNeedToStartScrolling = true
+        guard pageControl.numberOfPages > 1 else { return }
+        isUserInteracted = false
         autoScrollTimer?.invalidate()
         autoScrollTimer = Timer.scheduledTimer(
             timeInterval: scrollTimeInterval,
@@ -172,7 +181,7 @@ open class ImageSlider: UIView {
     }
     
     public func stopAutoScrolling() {
-        isNeedToStartScrolling = false
+        isUserInteracted = true
         autoScrollTimer?.invalidate()
     }
     
@@ -186,6 +195,7 @@ open class ImageSlider: UIView {
         layer.shadowRadius = 4.0
         
         scrollView.delegate = self
+        
         addSwipeGestures()
     }
     
@@ -224,7 +234,6 @@ open class ImageSlider: UIView {
         constraints.forEach {
             $0.isActive = true
         }
-        
     }
     
     /// Seems like shit, but it's work
@@ -252,15 +261,15 @@ open class ImageSlider: UIView {
     }
     
     private func addSwipeGestures() {
-        let swipeLeft = UISwipeGestureRecognizer(
+        swipeLeft = UISwipeGestureRecognizer(
+            target: self,
+            action: #selector(handleGesture)
+        )
+        swipeRight = UISwipeGestureRecognizer(
             target: self,
             action: #selector(handleGesture)
         )
         swipeLeft.direction = .left
-        let swipeRight = UISwipeGestureRecognizer(
-            target: self,
-            action: #selector(handleGesture)
-        )
         swipeRight.direction = .right
         
         addGestureRecognizer(swipeLeft)
@@ -271,24 +280,16 @@ open class ImageSlider: UIView {
     }
     
     @objc private func handleGesture(gesture: UISwipeGestureRecognizer) {
-        if gesture.direction == .left {
-            autoScrollDirection = .forward
-        } else if gesture.direction == .right {
-            autoScrollDirection = .backward
-        }
-        
         beginAutoScroll?.cancel()
-        
-        isUserInteracted = true
         stopAutoScrolling()
         
-        beginAutoScroll = DispatchWorkItem { [self] in
-            guard isAutoScrollable else { return }
-            isUserInteracted = false
-            startAutoScrolling()
+        beginAutoScroll = DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
+            guard self.isNeedToStartScrolling else { return }
+            self.startAutoScrolling()
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4, execute: beginAutoScroll!)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: beginAutoScroll!)
     }
     
     private func changeImageSliderViewStyle() {
@@ -317,40 +318,56 @@ open class ImageSlider: UIView {
 
 extension ImageSlider: UIScrollViewDelegate {
     
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         // Vertical scrolling disable
         // when imageslider pinned to superview
         scrollView.contentOffset.y = 0
         guard isUserInteracted else { return }
-        
-        if pageControl.page != scrollView.currentPage {
-            pageControl.setPage(scrollView.currentPage)
-        }
+        scrollToPage(scrollView.currentPage)
     }
     
     @objc private func autoScroll() {
-        if pageControl.page == 0 {
-            autoScrollDirection = .forward
-        } else if pageControl.page == pageControl.numberOfPages - 1 {
-            autoScrollDirection = .backward
+        scrollToPage(pageControl.page + 2)
+        if scrollView.currentPage <= pageControl.page {
+            scrollView.setContentOffset(
+                CGPoint(
+                    x: Int(scrollView.frame.width) * (pageControl.page + 1),
+                    y: 0
+                ),
+                animated: true
+            )
         }
-        let newPage = autoScrollDirection == .forward ?
-            pageControl.page + 1:
-            pageControl.page - 1
-        
-        scrollView.setContentOffset(
-            CGPoint(
-                x: Int(scrollView.frame.width) * newPage,
-                y: 0
-            ),
-            animated: true
-        )
-        pageControl.setPage(newPage)
+    }
+    
+    private func scrollToPage(_ page: Int) {
+        switch page {
+        case 0:
+            scrollView.setContentOffset(
+                CGPoint(
+                    x: Int(scrollView.frame.width) * (sliderItems.count - 2),
+                    y: 0
+                ),
+                animated: false
+            )
+            pageControl.setPage(sliderItems.count - 3)
+        case sliderItems.count - 1:
+            scrollView.setContentOffset(
+                CGPoint(
+                    x: Int(scrollView.frame.width) * 1,
+                    y: 0
+                ),
+                animated: false
+            )
+            pageControl.setPage(0)
+        default:
+            pageControl.setPage(page - 1)
+        }
     }
     
 }
 
 extension ImageSlider: UIGestureRecognizerDelegate {
+    
     public func gestureRecognizer(
         _ gestureRecognizer: UIGestureRecognizer,
         shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
@@ -364,4 +381,5 @@ extension ImageSlider: UIGestureRecognizerDelegate {
     ) -> Bool {
             return true
     }
+    
 }

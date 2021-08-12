@@ -67,9 +67,9 @@ internal class ChipPageControl: UIScrollView {
     }
     
     public func setPage(_ newPage: Int) {
-        guard newPage != page else { return }
+        guard newPage != page, numberOfPages > 1 else { return }
         guard newPage < numberOfPages else {
-            fatalError("New page is out of range. \nNew page need to be less than number of pages: \(numberOfPages)")
+            fatalError("New page is out of range: \(newPage). \nNew page need to be less than number of pages: \(numberOfPages)")
         }
         
         if pagesIsAmbigous() {
@@ -93,7 +93,7 @@ internal class ChipPageControl: UIScrollView {
                 animateScroll(to: step, move: .forward)
             }
         }
-        changePage(on: newPage, move: newPage > page ? .forward : .backward)
+        changePage(from: page, to: newPage)
         page = newPage
     }
     
@@ -135,51 +135,6 @@ internal class ChipPageControl: UIScrollView {
         }
     }
     
-    private func hideIfNeeded() {
-        if numberOfPages == 1 {
-            isHidden = hideOnSinglePage
-        } else {
-            isHidden = false
-        }
-    }
-    
-    private func pagesIsAmbigous() -> Bool {
-        layoutIfNeeded()
-        return frame.width < chipStackView.frame.width
-    }
-    
-    private func changePage(on pageIndex: Int, move: PageMove) {
-        guard chipStackView.arrangedSubviews.count > 1,
-              pageControlConstraints.count > 1
-        else { return }
-        
-        let currentPageView = chipStackView.arrangedSubviews[pageIndex]
-        let currentPageConstraint = pageControlConstraints[pageIndex]
-
-        let oldPageView = move == .forward ?
-            chipStackView.arrangedSubviews[pageIndex - 1] :
-            chipStackView.arrangedSubviews[pageIndex + 1]
-        let oldPageConstraint = move == .forward ?
-            pageControlConstraints[pageIndex - 1] :
-            pageControlConstraints[pageIndex + 1]
-        
-        UIView.animate(withDuration: 0.5, animations: {
-            oldPageView.backgroundColor = .lightGray
-            oldPageConstraint.constant -= self.currentChipWidth - self.chipWidth
-            currentPageView.backgroundColor = .white
-            currentPageConstraint.constant += self.currentChipWidth - self.chipWidth
-            self.layoutIfNeeded()
-        })
-    }
-    
-    private func animateScroll(to step: CGFloat, move: PageMove) {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.contentOffset.x += move == .forward ?
-                step :
-                -step
-        })
-    }
-    
     private func setupPages() {
         clearPages()
         hideIfNeeded()
@@ -212,4 +167,45 @@ internal class ChipPageControl: UIScrollView {
         }
         pageControlConstraints = []
     }
+    
+    private func hideIfNeeded() {
+        if numberOfPages == 1 {
+            isHidden = hideOnSinglePage
+        } else {
+            isHidden = false
+        }
+    }
+    
+    private func pagesIsAmbigous() -> Bool {
+        layoutIfNeeded()
+        return frame.width < chipStackView.frame.width
+    }
+    
+    private func changePage(from oldPage: Int, to newPage: Int) {
+        guard chipStackView.arrangedSubviews.count > 1,
+              pageControlConstraints.count > 1
+        else { return }
+        
+        let newPageView = chipStackView.arrangedSubviews[newPage]
+        let newPageConstraint = pageControlConstraints[newPage]
+        let oldPageView = chipStackView.arrangedSubviews[oldPage]
+        let oldPageConstraint = pageControlConstraints[oldPage]
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            oldPageView.backgroundColor = .lightGray
+            oldPageConstraint.constant -= self.currentChipWidth - self.chipWidth
+            newPageView.backgroundColor = .white
+            newPageConstraint.constant += self.currentChipWidth - self.chipWidth
+            self.layoutIfNeeded()
+        })
+    }
+    
+    private func animateScroll(to step: CGFloat, move: PageMove) {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.contentOffset.x += move == .forward ?
+                step :
+                -step
+        })
+    }
+    
 }
