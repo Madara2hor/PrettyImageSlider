@@ -326,17 +326,19 @@ extension ImageSlider: UIScrollViewDelegate {
         scrollToPage(scrollView.currentPage)
     }
     
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        guard !isUserInteracted else { return }
+        scrollToPage(scrollView.currentPage)
+    }
+    
     @objc private func autoScroll() {
-        scrollToPage(pageControl.page + 2)
-        if scrollView.currentPage <= pageControl.page {
-            scrollView.setContentOffset(
-                CGPoint(
-                    x: Int(scrollView.frame.width) * (pageControl.page + 1),
-                    y: 0
-                ),
-                animated: true
-            )
-        }
+        scrollView.setContentOffset(
+            CGPoint(
+                x: Int(scrollView.frame.width) * (pageControl.page + 2),
+                y: 0
+            ),
+            animated: true
+        )
     }
     
     private func scrollToPage(_ page: Int) {
