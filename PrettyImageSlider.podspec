@@ -25,8 +25,8 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://bitbucket.org/toolbarstudio/PrettyImageSlider'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Kirill Provkin' => 'Kirill.Provkin@softomate.com' }
-  s.source           = { :git => 'https://bitbucket.org/toolbarstudio/PrettyImageSlider.git', :tag => s.version.to_s }
+  s.author           = { 'Madara2hor' => 'Kkprokk07@gmail.com' }
+  s.source           = { :git => 'https://github.com/Madara2hor/PrettyImageSlider', :tag => s.version.to_s }
 
   s.ios.deployment_target = '12.1'
   s.swift_version = '5.0'
