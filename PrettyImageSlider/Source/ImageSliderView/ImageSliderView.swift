@@ -52,6 +52,11 @@ open class ImageSliderView: UIImageView {
     }
     
     // MARK: - Private properties
+    private var shadowView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     private var titleLabel: UILabel = {
         let label = UILabel()
@@ -64,7 +69,6 @@ open class ImageSliderView: UIImageView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 2
-        
         return label
     }()
     
@@ -88,6 +92,12 @@ open class ImageSliderView: UIImageView {
         setupLayout()
     }
     
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        shadowView.removeAllShadows()
+        shadowView.addInnerShadow(to: [.bottom])
+    }
+    
     // MARK: - Public methods
     
     public func bind(with object: ImageSliderObject) {
@@ -109,16 +119,21 @@ open class ImageSliderView: UIImageView {
         translatesAutoresizingMaskIntoConstraints = false
         contentMode = .scaleAspectFill
         clipsToBounds = true
-        addInnerShadow(to: [.bottom])
     }
     
     private func setupViews() {
+        addSubview(shadowView)
         addSubview(titleLabel)
         addSubview(descriptionLabel)
     }
     
     private func setupLayout() {
         let constraints: [NSLayoutConstraint] = [
+            /// Shadow view constraints
+            shadowView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            shadowView.topAnchor.constraint(equalTo: topAnchor),
+            shadowView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            shadowView.bottomAnchor.constraint(equalTo: bottomAnchor),
             /// Title label constraints
             titleLabel.heightAnchor.constraint(equalToConstant: 16),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
@@ -134,5 +149,7 @@ open class ImageSliderView: UIImageView {
         constraints.forEach {
             $0.isActive = true
         }
+        
+        layoutIfNeeded()
     }
 }

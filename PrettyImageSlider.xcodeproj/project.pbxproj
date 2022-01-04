@@ -345,6 +345,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.2.3;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = madara2hor.PrettyImageSlider;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -374,6 +375,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.2.3;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = madara2hor.PrettyImageSlider;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

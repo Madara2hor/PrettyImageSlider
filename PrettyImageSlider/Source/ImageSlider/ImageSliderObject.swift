@@ -8,11 +8,17 @@
 import UIKit
 
 public struct ImageSliderObject {
-    // Image for slider object
+    /**
+     Image for slider object
+     */
     public let image: UIImage
-    // Title for slider object
+    /**
+     Title for slider object
+    */
     public let title: String?
-    // Description for slider object
+    /**
+     Description for slider object
+    */
     public let description: String?
     
     public init(

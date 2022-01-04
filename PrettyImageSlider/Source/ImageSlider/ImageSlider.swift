@@ -47,14 +47,24 @@ open class ImageSlider: UIView {
             changeImageSliderViewStyle()
         }
     }
+    /**
+     set it `false` if you wanna see page control on single slider element
+     */
     public var hidePageControlOnSinglePage: Bool = true {
         didSet {
             pageControl.hideOnSinglePage = hidePageControlOnSinglePage
         }
     }
+    /**
+     Return current displayed page
+     */
     public var currentPage: Int {
-        return pageControl.currentPage
+        return pageControl.page
     }
+    /**
+     set it `true` befor call `startAutoScrolling()`.
+     Then slider will scroll automatically
+     */
     public var isAutoScrollable: Bool = false {
         didSet {
             isUserInteracted = !isAutoScrollable
@@ -62,6 +72,10 @@ open class ImageSlider: UIView {
             swipeRight.isEnabled = isAutoScrollable
         }
     }
+    /**
+     Delay before moving to the next slider element.
+     Default value is 3.
+     */
     public var scrollTimeInterval: TimeInterval = 3
     
     // MARK: - Private properties
@@ -118,8 +132,29 @@ open class ImageSlider: UIView {
         setupLayout()
     }
     
+    // MARK: - Override
+    
+    open override var bounds: CGRect {
+        didSet {
+            scrollView.setContentOffset(
+                CGPoint(
+                    x: CGFloat(currentPage + 1) * bounds.size.width,
+                    y: 0
+                ),
+                animated: false
+            )
+        }
+    }
+    
     // MARK: - Public methods
     
+    /**
+     Use this method for set up image slider
+        
+     - Parameter sliderObjects: objects of image slider
+     
+     - Returns: null.
+     */
     public func bind(with sliderObjects: [ImageSliderObject]) {
         clear()
         guard !sliderObjects.isEmpty else {
@@ -165,6 +200,12 @@ open class ImageSlider: UIView {
         }
     }
     
+    /**
+     Start slider auto scrolling. Be sure set isAutoScrollable = true before call it.
+     Auto scroll will begin after update method will call
+     
+     - Returns: null.
+     */
     public func startAutoScrolling() {
         guard isAutoScrollable else { return }
         isNeedToStartScrolling = true
@@ -179,7 +220,11 @@ open class ImageSlider: UIView {
             repeats: true
         )
     }
-    
+    /**
+     Stop slider auto scroll
+     
+     - Returns: null.
+     */
     public func stopAutoScrolling() {
         isUserInteracted = true
         autoScrollTimer?.invalidate()
