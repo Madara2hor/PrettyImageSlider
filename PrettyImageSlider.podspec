@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   You can dinamicly change font, size and weight of image title and description from code and storyboard.
                        DESC
 
-  s.homepage         = 'https://bitbucket.org/toolbarstudio/PrettyImageSlider'
+  s.homepage         = 'https://github.com/Madara2hor/PrettyImageSlider'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Madara2hor' => 'Kkprokk07@gmail.com' }
