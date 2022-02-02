@@ -98,7 +98,7 @@ override func viewWillDisappear(_ animated: Bool) {
 ____
 ### Автор
 
-Kirill Provkin, Kirill.Provkin@softomate.com
+Kirill Kapis, Kkprokk07@gmail.com
 
 ____
 ## License
