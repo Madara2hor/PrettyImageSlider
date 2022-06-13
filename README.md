@@ -3,7 +3,7 @@
 ____
 ### 📄Описание 
 
-PrettyImageSlider - красивый слайдер с картинками.
+PrettyImageSlider - слайдер с картинками.
 
 ![Пример работы библиотеки](/Assets/asset_0.gif?rawValue=true "Пример работы библиотеки")
 
@@ -33,14 +33,13 @@ ____
 | Property | getter, setter | Interface Builder |
 |:----|:----|:----------|
 | cornerRadius | ✅, ✅ | ✅ |
-| titleTextColor | ✅, ✅ | ✅ |
-| titleFont | ✅, ✅ | ❌ |
-| descriptionTextColor | ✅, ✅ | ✅ |
-| descriptionFont| ✅, ✅ | ❌ | 
+| imageSliderViewStyle | ✅, ✅ | ❌ |
 | hidePageControlOnSinglePage | ✅, ✅ | ❌ |
 | currentPage | ✅, ❌ | ❌ |
 | isAutoScrollable | ✅, ✅ | ❌ |
 | scrollTimeInterval | ✅, ✅ | ❌ |
+
+> `imageSliderViewStyle` позволяет задать стиль встроенной UIView слайдера.
 
 > При использовании `isAutoScrollable = true` пользователь так же может скроллить слайдер. Авто скролл возобновится автоматически через 5 секунд после последнего взаимодействия (свайп влево или вправо) со слайдером.
 
@@ -48,19 +47,32 @@ ____
 ### 🤙🏼Методы
 
 #### Bind
+##### ImageSliderViews
 ```Swift
 public func bind(with sliderObjects: [ImageSliderObject])
 ```
 
 Пример использования:
 ```Swift
-sliderView.bind(
-    with: ImageSliderObject(
-        image: URL(string: "https://website.com/image.jpg"),
+let sliderObjects = [
+    ImageSliderObject(
+        image: UIImage(),
         title: "Perfect title for image",
         description: "Amaizing description for image"
     )
-)
+]
+
+sliderView.bind(with: sliderObjects)
+```
+
+##### CustomViews
+```Swift
+public func bind(with customViews: [UIView])
+```
+
+Пример использования:
+```Swift
+sliderView.bind(with: [MyCustomView()])
 ```
 
 #### Auto scrolling
