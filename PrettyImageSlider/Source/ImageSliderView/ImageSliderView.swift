@@ -1,14 +1,6 @@
-//
-//  SliderObjectView.swift
-//  PrettyImageSlider
-//
-//  Created by Madara2hor on 21.04.2021.
-//
-
 import UIKit
 
 open class ImageSliderView: UIImageView {
-    
     public var objectStyle: ImageSliderViewStyle = ImageSliderViewStyle() {
         didSet {
             titleLabel.textColor = objectStyle.titleTextColor
@@ -39,8 +31,6 @@ open class ImageSliderView: UIImageView {
     }()
     
     private var object: ImageSliderViewObject?
-    
-    // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)

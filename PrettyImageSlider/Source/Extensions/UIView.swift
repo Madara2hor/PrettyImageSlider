@@ -1,14 +1,6 @@
-//
-//  UIView.swift
-//  PrettyImageSlider
-//
-//  Created by Madara2hor on 17.04.2021.
-//
-
 import UIKit
 
 internal extension UIView {
-    
     func addInnerShadow(
         to edges: [UIRectEdge],
         radius: CGFloat? = nil,
@@ -29,21 +21,41 @@ internal extension UIView {
 
             switch edge {
             case .top:
-                gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-                gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
-                gradientLayer.frame = CGRect(x: 0.0, y: 0.0, width: viewFrame.width, height: mainRadius)
+                gradientLayer.startPoint = CGPoint(x: .half, y: .zero)
+                gradientLayer.endPoint = CGPoint(x: .half, y: .one)
+                gradientLayer.frame = CGRect(
+                    x: .zero,
+                    y: .zero,
+                    width: viewFrame.width,
+                    height: mainRadius
+                )
             case .bottom:
-                gradientLayer.startPoint = CGPoint(x: 0.5, y: 1.0)
-                gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.0)
-                gradientLayer.frame = CGRect(x: 0.0, y: viewFrame.height - mainRadius, width: viewFrame.width, height: mainRadius)
+                gradientLayer.startPoint = CGPoint(x: .half, y: .one)
+                gradientLayer.endPoint = CGPoint(x: .half, y: .zero)
+                gradientLayer.frame = CGRect(
+                    x: .zero,
+                    y: viewFrame.height - mainRadius,
+                    width: viewFrame.width,
+                    height: mainRadius
+                )
             case .left:
-                gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
-                gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
-                gradientLayer.frame = CGRect(x: 0.0, y: 0.0, width: mainRadius, height: viewFrame.height)
+                gradientLayer.startPoint = CGPoint(x: .zero, y: .half)
+                gradientLayer.endPoint = CGPoint(x: .one, y: .half)
+                gradientLayer.frame = CGRect(
+                    x: .zero,
+                    y: .zero,
+                    width: mainRadius,
+                    height: viewFrame.height
+                )
             case .right:
-                gradientLayer.startPoint = CGPoint(x: 1.0, y: 0.5)
-                gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.5)
-                gradientLayer.frame = CGRect(x: viewFrame.width - mainRadius, y: 0.0, width: mainRadius, height: viewFrame.height)
+                gradientLayer.startPoint = CGPoint(x: .one, y: .half)
+                gradientLayer.endPoint = CGPoint(x: .zero, y: .half)
+                gradientLayer.frame = CGRect(
+                    x: viewFrame.width - mainRadius,
+                    y: .zero,
+                    width: mainRadius,
+                    height: viewFrame.height
+                )
             default:
                 break
             }

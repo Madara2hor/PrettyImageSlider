@@ -1,15 +1,7 @@
-//
-//  UIColor.swift
-//  PrettyImageSlider
-//
-//  Created by Madara2hor on 16.04.2021.
-//
-
 import UIKit
 
 internal extension UIColor {
-    
-    convenience init(hex: String, alpha: CGFloat = 1.0) {
+    convenience init(hex: String, alpha: CGFloat = .one) {
         var hexFormatted: String = hex.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()
 
         if hexFormatted.hasPrefix("#") {
@@ -18,7 +10,7 @@ internal extension UIColor {
 
         assert(hexFormatted.count == 6, "Invalid hex code used.")
 
-        var rgbValue: UInt64 = 0
+        var rgbValue: UInt64 = .zero
         Scanner(string: hexFormatted).scanHexInt64(&rgbValue)
 
         self.init(

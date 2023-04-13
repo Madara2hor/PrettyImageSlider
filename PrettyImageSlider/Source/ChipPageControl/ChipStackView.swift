@@ -1,16 +1,7 @@
-//
-//  ChipStackView.swift
-//  PrettyImageSlider
-//
-//  Created by Madara2hor on 19.04.2021.
-//
-
 import UIKit
 
 class ChipStackView: UIStackView {
-    
     enum Constants {
-        
         static let currentChipWidth: CGFloat = 32
         static let chipWidth: CGFloat = 8
     }
@@ -45,13 +36,16 @@ class ChipStackView: UIStackView {
         let oldPageView = arrangedSubviews[oldPage]
         let oldPageConstraint = pageControlConstraints[oldPage]
         
-        UIView.animate(withDuration: 0.5, animations: {
-            oldPageView.backgroundColor = .lightGray
-            oldPageConstraint.constant -= Constants.currentChipWidth - Constants.chipWidth
-            newPageView.backgroundColor = .white
-            newPageConstraint.constant += Constants.currentChipWidth - Constants.chipWidth
-            self.layoutIfNeeded()
-        })
+        UIView.animate(
+            withDuration: 0.5,
+            animations: {
+                oldPageView.backgroundColor = .lightGray
+                oldPageConstraint.constant -= Constants.currentChipWidth - Constants.chipWidth
+                newPageView.backgroundColor = .white
+                newPageConstraint.constant += Constants.currentChipWidth - Constants.chipWidth
+                self.layoutIfNeeded()
+            }
+        )
         
         page = newPage
     }

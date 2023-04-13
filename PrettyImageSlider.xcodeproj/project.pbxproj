@@ -9,11 +9,15 @@
 /* Begin PBXBuildFile section */
 		0236FF0726298B4800EEE3B0 /* ImageSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0236FF0626298B4800EEE3B0 /* ImageSlider.swift */; };
 		0236FF2026298F5C00EEE3B0 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0236FF1F26298F5C00EEE3B0 /* UIColor.swift */; };
-		0236FF312629BC5700EEE3B0 /* ImageSliderObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0236FF302629BC5700EEE3B0 /* ImageSliderObject.swift */; };
 		0236FF40262A008B00EEE3B0 /* UIScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0236FF3F262A008B00EEE3B0 /* UIScrollView.swift */; };
 		0236FF44262A034400EEE3B0 /* ChipPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0236FF43262A034400EEE3B0 /* ChipPageControl.swift */; };
 		0236FF50262A058600EEE3B0 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0236FF4F262A058600EEE3B0 /* UIView.swift */; };
 		0236FF7B2630008100EEE3B0 /* ImageSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0236FF7A2630008100EEE3B0 /* ImageSliderView.swift */; };
+		13AF7B8829E7E19D002E6078 /* ImageSliderViewObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF7B8629E7E19D002E6078 /* ImageSliderViewObject.swift */; };
+		13AF7B8929E7E19D002E6078 /* ImageSliderViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF7B8729E7E19D002E6078 /* ImageSliderViewStyle.swift */; };
+		13AF7B8B29E7E1C3002E6078 /* ChipStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF7B8A29E7E1C3002E6078 /* ChipStackView.swift */; };
+		13AF7B8E29E7E1E7002E6078 /* PrimitiveLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF7B8C29E7E1E7002E6078 /* PrimitiveLiterals.swift */; };
+		13AF7B8F29E7E1E7002E6078 /* NSObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13AF7B8D29E7E1E7002E6078 /* NSObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,11 +25,15 @@
 		0236FEEE26298B3B00EEE3B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0236FF0626298B4800EEE3B0 /* ImageSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSlider.swift; sourceTree = "<group>"; };
 		0236FF1F26298F5C00EEE3B0 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
-		0236FF302629BC5700EEE3B0 /* ImageSliderObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSliderObject.swift; sourceTree = "<group>"; };
 		0236FF3F262A008B00EEE3B0 /* UIScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollView.swift; sourceTree = "<group>"; };
 		0236FF43262A034400EEE3B0 /* ChipPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChipPageControl.swift; sourceTree = "<group>"; };
 		0236FF4F262A058600EEE3B0 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		0236FF7A2630008100EEE3B0 /* ImageSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSliderView.swift; sourceTree = "<group>"; };
+		13AF7B8629E7E19D002E6078 /* ImageSliderViewObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSliderViewObject.swift; sourceTree = "<group>"; };
+		13AF7B8729E7E19D002E6078 /* ImageSliderViewStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSliderViewStyle.swift; sourceTree = "<group>"; };
+		13AF7B8A29E7E1C3002E6078 /* ChipStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChipStackView.swift; sourceTree = "<group>"; };
+		13AF7B8C29E7E1E7002E6078 /* PrimitiveLiterals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimitiveLiterals.swift; sourceTree = "<group>"; };
+		13AF7B8D29E7E1E7002E6078 /* NSObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +86,8 @@
 		0236FF1E26298F4F00EEE3B0 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				13AF7B8D29E7E1E7002E6078 /* NSObject.swift */,
+				13AF7B8C29E7E1E7002E6078 /* PrimitiveLiterals.swift */,
 				0236FF1F26298F5C00EEE3B0 /* UIColor.swift */,
 				0236FF3F262A008B00EEE3B0 /* UIScrollView.swift */,
 				0236FF4F262A058600EEE3B0 /* UIView.swift */,
@@ -88,6 +98,8 @@
 		0236FF2E2629BC3500EEE3B0 /* ImageSliderView */ = {
 			isa = PBXGroup;
 			children = (
+				13AF7B8629E7E19D002E6078 /* ImageSliderViewObject.swift */,
+				13AF7B8729E7E19D002E6078 /* ImageSliderViewStyle.swift */,
 				0236FF7A2630008100EEE3B0 /* ImageSliderView.swift */,
 			);
 			path = ImageSliderView;
@@ -96,6 +108,7 @@
 		0236FF47262A034B00EEE3B0 /* ChipPageControl */ = {
 			isa = PBXGroup;
 			children = (
+				13AF7B8A29E7E1C3002E6078 /* ChipStackView.swift */,
 				0236FF43262A034400EEE3B0 /* ChipPageControl.swift */,
 			);
 			path = ChipPageControl;
@@ -104,7 +117,6 @@
 		0236FF4C262A04D900EEE3B0 /* ImageSlider */ = {
 			isa = PBXGroup;
 			children = (
-				0236FF302629BC5700EEE3B0 /* ImageSliderObject.swift */,
 				0236FF0626298B4800EEE3B0 /* ImageSlider.swift */,
 			);
 			path = ImageSlider;
@@ -189,12 +201,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0236FF312629BC5700EEE3B0 /* ImageSliderObject.swift in Sources */,
 				0236FF2026298F5C00EEE3B0 /* UIColor.swift in Sources */,
+				13AF7B8929E7E19D002E6078 /* ImageSliderViewStyle.swift in Sources */,
 				0236FF40262A008B00EEE3B0 /* UIScrollView.swift in Sources */,
 				0236FF44262A034400EEE3B0 /* ChipPageControl.swift in Sources */,
+				13AF7B8B29E7E1C3002E6078 /* ChipStackView.swift in Sources */,
+				13AF7B8E29E7E1E7002E6078 /* PrimitiveLiterals.swift in Sources */,
 				0236FF0726298B4800EEE3B0 /* ImageSlider.swift in Sources */,
 				0236FF7B2630008100EEE3B0 /* ImageSliderView.swift in Sources */,
+				13AF7B8F29E7E1E7002E6078 /* NSObject.swift in Sources */,
+				13AF7B8829E7E19D002E6078 /* ImageSliderViewObject.swift in Sources */,
 				0236FF50262A058600EEE3B0 /* UIView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

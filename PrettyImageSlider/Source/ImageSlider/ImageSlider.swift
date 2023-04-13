@@ -1,15 +1,6 @@
-//
-//  ImageSlider.swift
-//  PrettyImageSlider
-//
-//  Created by Madara2hor on 16.04.2021.
-//
-
-
 import UIKit
 
 open class ImageSlider: UIView {
-    
     @IBInspectable
     public var cornerRadius: CGFloat = 10 {
         didSet {
@@ -122,12 +113,12 @@ open class ImageSlider: UIView {
     }
     
     public func startAutoScrolling() {
-        guard isAutoScrollable else {
+        if isAutoScrollable == false {
             return
         }
         
         isNeedToStartScrolling = true
-        guard pageControl.numberOfPages > .one else {
+        if pageControl.numberOfPages <= .one {
             return
         }
         
@@ -157,7 +148,7 @@ open class ImageSlider: UIView {
     private func setupShadow() {
         layer.backgroundColor = UIColor.clear.cgColor
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 1.0)
+        layer.shadowOffset = CGSize(width: .zero, height: .one)
         layer.shadowOpacity = 0.3
         layer.shadowRadius = 4.0
     }
@@ -334,18 +325,17 @@ extension ImageSlider: UIScrollViewDelegate {
 }
 
 extension ImageSlider: UIGestureRecognizerDelegate {
-    
     public func gestureRecognizer(
         _ gestureRecognizer: UIGestureRecognizer,
         shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
     ) -> Bool {
-            return true
+        return true
     }
 
     public func gestureRecognizer(
         _ gestureRecognizer: UIGestureRecognizer,
         shouldReceive touch: UITouch
     ) -> Bool {
-            return true
+        return true
     }
 }

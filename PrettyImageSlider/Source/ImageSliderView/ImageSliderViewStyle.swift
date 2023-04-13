@@ -1,14 +1,6 @@
-//
-//  ImageSliderViewStyle.swift
-//  tabBar
-//
-//  Created by Madara2hor on 13.06.2022.
-//
-
 import UIKit
 
 public struct ImageSliderViewStyle {
-    
     var titleTextColor: UIColor
     var titleFont: UIFont
     var descriptionTextColor: UIColor

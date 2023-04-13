@@ -1,10 +1,3 @@
-//
-//  ShipPageControl.swift
-//  PrettyImageSlider
-//
-//  Created by Madara2hor on 17.04.2021.
-//
-
 import UIKit
 
 enum PageMove {
@@ -13,7 +6,6 @@ enum PageMove {
 }
 
 internal class ChipPageControl: UIScrollView {
-    
     private let chipStackView = ChipStackView()
     
     private var ambigousConstraints: [NSLayoutConstraint] = []
@@ -75,8 +67,6 @@ internal class ChipPageControl: UIScrollView {
         chipStackView.changePage(from: page, to: newPage)
     }
     
-    // MARK: - Private methods
-    
     private func setup() {
         translatesAutoresizingMaskIntoConstraints = false
 
@@ -130,8 +120,11 @@ internal class ChipPageControl: UIScrollView {
     }
     
     private func animateScroll(to step: CGFloat, move: PageMove) {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.contentOffset.x += move == .forward ? step : -step
-        })
+        UIView.animate(
+            withDuration: 0.5,
+            animations: {
+                self.contentOffset.x += move == .forward ? step : -step
+            }
+        )
     }
 }
